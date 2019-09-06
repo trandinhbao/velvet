@@ -1,0 +1,36 @@
+{
+  "name": "velvet/velvet",
+  "description": "A PHP Template engine utilizing Vue's Single File Component",
+  "keywords": [
+    "velvet",
+    "vue",
+    "template",
+    "node",
+    "frontend"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Bao Tran",
+      "email": "baotd.weebpal@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.2"
+  },
+  "archive": {
+    "exclude": [
+      "/examples"
+    ]
+  },
+  "autoload": {
+    "psr-4": {
+      "Velvet\\": "velvet/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "eftec\\tests\\": "tests/"
+    }
+  }
+}
