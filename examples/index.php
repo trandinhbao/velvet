@@ -1,5 +1,6 @@
 <?php 
-require('../Velvet/Velvet.php');
+// require('../Velvet/Velvet.php');
+require 'vendor/autoload.php';
 
 use Velvet\Velvet;
 

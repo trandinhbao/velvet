@@ -27,10 +27,5 @@
     "psr-4": {
       "Velvet\\": "velvet/"
     }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "eftec\\tests\\": "tests/"
-    }
   }
 }

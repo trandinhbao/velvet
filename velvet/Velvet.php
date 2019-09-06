@@ -3,12 +3,12 @@
 namespace Velvet;
 
 /**
- * Velvet - A frontend-oriented PHP Template system to use with Vue
+ * THe main Velvet class
  *
  * @package   Velvet
- * @author    Tran Tran
+ * @author    Bao Tran
  * @copyright Copyright (c) 2019 Bao Tran, MIT License
- * @version   0.0.1-alpha
+ * @version   0.0.2-dev
  */
 final class Velvet {
   private $source_dir;
@@ -19,6 +19,23 @@ final class Velvet {
     $this->source_dir = $source_dir;
     $this->destination_dir = $destination_dir;
     $this->mode = $mode;
+  }
+
+  /**
+   * @param string $template
+   */
+  private function adjustTemplate($template) {
+    // Replace first <template> tag
+    $first_tag_position = \strpos($template, "<template>");
+    if ($first_tag_position !== false) {
+      $template = substr_replace($template, '<div id="app">', $first_tag_position, strlen('<template>'));
+    }
+
+    $last_tag_position = \strpos($template, "</template>");
+    if ($last_tag_position !== false) {
+      $template = substr_replace($template, '</div>', $last_tag_position, strlen('</template>'));
+    } else echo 'notfound ';
+    return $template;
   }
 
   public function compileAll() {
@@ -35,16 +52,48 @@ final class Velvet {
       $styles = $matches[0];
     }
 
+    $template_output =
+<<<HTML
+<!DOCTYPE html>
+<link rel="stylesheet" href="index.css"/>
+
+<body>
+
+HTML;
+
+    $script_output   = '';
+    $style_output    = '';
+
     foreach ($templates as $template) {
-      file_put_contents($this->destination_dir . '/index.html', $template);
+      $template_output .= $this->adjustTemplate($template);
     }
 
     foreach ($scripts as $script) {
-      file_put_contents($this->destination_dir . '/index.js', $script);
+      $script_output .= strip_tags($script);
     }
 
     foreach ($styles as $style) {
-      file_put_contents($this->destination_dir . '/index.css', $style);
+      $style_output .= strip_tags($style);
     }
+
+    $template_output .= 
+<<<HTML
+
+</body>
+
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+
+<script type="module">
+  import config from './index.js'
+
+  const vm = new Vue(config)
+  vm.\$mount('#app')
+  console.log('mounted')
+</script>
+HTML;
+
+    file_put_contents($this->destination_dir . '/index.html', $template_output);
+    file_put_contents($this->destination_dir . '/index.js', $script_output);
+    file_put_contents($this->destination_dir . '/index.css', $style_output);
   }
 }
