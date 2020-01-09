@@ -2,20 +2,34 @@
 
 namespace Velvet;
 
+use Velvet\FileSystem\FileSystemInterface;
+
 /**
- * THe main Velvet class
+ * The main Velvet class
  *
  * @package   Velvet
  * @author    Bao Tran
  * @copyright Copyright (c) 2019 Bao Tran, MIT License
- * @version   0.0.2-dev
+ * @version   0.0.2-alpha
  */
 final class Velvet {
   private $source_dir;
   private $destination_dir;
   private $mode;
 
-  public function __construct($source_dir, $destination_dir, $mode = 'development') {
+  /**
+   * @param string $source_dir 
+   *   The source directory contains template files
+   * @param string $destination_dir
+   *   The desination directory for compiled templates
+   * @param string $mode 
+   *   The compile mode
+   *    - prod/production will compile to more optimized templates
+   *    - dev/development will include debug infomation
+   * @param \Velvet\FileSystem\FileSystemInterface $file_system
+   *   The file system to load templates 
+   */
+  public function __construct($source_dir, $destination_dir, $mode = 'development', ?FileSystemInterface $file_system = NULL) {
     $this->source_dir = $source_dir;
     $this->destination_dir = $destination_dir;
     $this->mode = $mode;
@@ -93,7 +107,9 @@ HTML;
 HTML;
 
     file_put_contents($this->destination_dir . '/index.html', $template_output);
-    file_put_contents($this->destination_dir . '/index.js', $script_output);
+    file_put_contents($this->destination_dir . '/index.mjs', $script_output);
     file_put_contents($this->destination_dir . '/index.css', $style_output);
   }
+
+  // public function render($template, )
 }
